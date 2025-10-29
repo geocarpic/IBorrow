@@ -4,14 +4,16 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.util.Scanner;
 
 public class Idea {
     public static void main(String[] args)
     {
         Scanner str_input = new Scanner(System.in);
-        String choice;
+        String choice, crrtPasswd;
+        
+        System.out.print("Enter password: ");
+        crrtPasswd = str_input.nextLine();
         
         while(true)
         {
@@ -28,45 +30,28 @@ public class Idea {
             System.out.print("Enter choice: ");
             choice = str_input.nextLine();
 
+            clearScreen();
+            System.out.println("\n");
+
             if(choice.equals("1")) 
             {
-                try 
-                { 
-                    clearScreen();
-                    System.out.println("\n");
-                    
-                    AddRecord(); 
-                } 
-                catch(IOException e) 
-                { 
-                    e.printStackTrace(); 
-                }
+                try { AddRecord(str_input); } catch(IOException e) { e.printStackTrace(); }
             }
             else if(choice.equals("2"))
             {
-                try 
-                { 
-                    clearScreen(); 
-                    System.out.println("\n"); 
-                    
-                    ViewAllRecord(); 
-                } 
-                catch(IOException e) 
-                { 
-                    e.printStackTrace(); 
-                }
+                try { ViewAllRecord(crrtPasswd); } catch(IOException e) { e.printStackTrace(); }
             }
             else if(choice.equals("3"))
             {
-                try { SearchRecordbyIDOrName(); } catch(IOException e) { e.printStackTrace(); }
+                try { UpdateRecordbyID(); } catch(IOException e) { e.printStackTrace(); }
             }
             else if(choice.equals("4"))
             {
-                try { UpdateRecordbyID(); } catch(IOException e) { e.printStackTrace(); }
+                try { DeleteRecordByID(); } catch(IOException e) { e.printStackTrace(); }
             }
             else if(choice.equals("5"))
             {
-                try { DeleteRecordByID(); } catch(IOException e) { e.printStackTrace(); }
+                try { SearchRecordbyIDOrName(); } catch(IOException e) { e.printStackTrace(); }
             }
             else if(choice.equals("0")) 
             {
@@ -85,25 +70,24 @@ public class Idea {
         str_input.close();
     }
 
-    public static void AddRecord() throws IOException 
+    public static void AddRecord(Scanner str_input) throws IOException 
     {
-        Scanner strInput = new Scanner(System.in);
-        BufferedWriter bw;
-        String name, id, section, bookName;
-        
-        System.out.println("==========ADD RECORD==========");
         try
         {
+            BufferedWriter bw;
+            String name, id, section, bookName;
             bw = new BufferedWriter(new FileWriter("employee_db.txt", true));
 
+            System.out.println("==========ADD RECORD==========");
+
             System.out.print("Enter name: ");
-            name = strInput.nextLine();
+            name = str_input.nextLine();
             System.out.print("Enter student ID: ");
-            id = strInput.nextLine();
+            id = str_input.nextLine();
             System.out.print("Enter section: ");
-            section = strInput.nextLine();
+            section = str_input.nextLine();
             System.out.print("Enter book name: ");
-            bookName = strInput.nextLine();
+            bookName = str_input.nextLine();
 
             name = name.toUpperCase();
             id = id.toUpperCase();
@@ -154,27 +138,27 @@ public class Idea {
         );
 	}
 
-    public static void ViewAllRecord() throws IOException 
+    public static void ViewAllRecord(String crrtPasswd) throws IOException 
     {
         try 
         { 
-			Scanner strInput = new Scanner(System.in);
+            Scanner str_input = new Scanner(System.in);
             String[] data;
             String record;
             BufferedReader br;
-            String choice, inpPasswd, crrtPasswd;
+            String choice, inpPasswd;
             boolean isValid;
             
             isValid = false;
-            crrtPasswd = "newjeans";
             br = new BufferedReader(new FileReader("employee_db.txt"));
             
             System.out.print("Show uncensored information? (requires password, Y/N): ");
-            choice = strInput.nextLine();
+            choice = str_input.nextLine();
+
             if(choice.equalsIgnoreCase("y")) 
             {
                 System.out.print("Enter password: ");
-                inpPasswd = strInput.nextLine();
+                inpPasswd = str_input.nextLine();
                 if(inpPasswd.equals(crrtPasswd))
                 {
                     isValid = true;
@@ -190,7 +174,7 @@ public class Idea {
             }
 
 			showTableHeader();
-
+            
 			while((record = br.readLine()) != null) 
             {
 				data = record.split("::::");
@@ -207,9 +191,9 @@ public class Idea {
 
 			br.close();    
 		} 
-        catch (IOException ex) 
+        catch (IOException e) 
         {
-			System.out.println(ex.toString());
+			System.out.println(e.toString());
 		}
     }
     
@@ -221,8 +205,48 @@ public class Idea {
 
     public static void DeleteRecordByID() throws IOException 
     {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'DeleteRecordByID'");
+		try 
+        {
+    		Scanner str_input = new Scanner(System.in);
+            String[] data ;
+            String id, record;
+    		File temporaryDB;
+    		File db;
+    		BufferedReader br;
+    		BufferedWriter bw;
+
+            temporaryDB = new File("employee_db_temp.txt");
+            db = new File("employee_db.txt");
+            br = new BufferedReader(new FileReader(db));
+            bw = new BufferedWriter(new FileWriter(temporaryDB));
+
+    		ViewAllRecord(null);
+    		System.out.println("Delete Employee Record");    		
+    		System.out.println("Enter the Employee ID: ");
+    		id = str_input.nextLine();
+    		
+    		while((record = br.readLine()) != null) 
+            {
+    			data = record.split("::::");
+    			if(data[1].toString().equals(id)) 
+    			{
+                    continue;
+                }
+                
+                bw.write(record);
+    			bw.flush();
+    			bw.newLine();
+    		}
+    		
+    		br.close();
+    		bw.close();
+    		db.delete();
+    		temporaryDB.renameTo(db);
+		} 
+        catch(IOException e) 
+        {
+			System.out.println (e.toString());
+		}
     }
     
     public static void SearchRecordbyIDOrName() throws IOException 

@@ -6,277 +6,359 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class Idea {
-    public static void main(String[] args)
+public class IBorrow {
+    public static void main(String[] args) 
     {
-        Scanner str_input = new Scanner(System.in);
+        Scanner input = new Scanner(System.in);
         String choice;
-        String inpPasswd, crrtPasswd;
+        String inPasswd, crrtPassword;
         boolean isValid;
-        
-        System.out.print("Enter password: ");
-        crrtPasswd = str_input.nextLine();
-        
+
         isValid = false;
+
+        clearScreen();
+        System.out.println("\n");
+        System.out.print("\tEnter password for the system to use: ");
+        crrtPassword = input.nextLine();
+        clearScreen();
+        
         while(true)
         {
-            clearScreen();System.out.println("\n");
-            System.out.println("+ ────────────────────────────────────────────── +");
-            System.out.println("│    IBorrow: Book Borrowing Management System   │");
-            System.out.println("│ Main                                           │");
-            System.out.println("│ [1] Add borrower                               │");
-            System.out.println("│ [2] View borrowers                             │");
-            System.out.println("│ [3] Change borrower info                       │");
-            System.out.println("│ [4] Delete borrower                            │");
-            System.out.println("│ [5] Search a borrower                          │");
-            System.out.println("│ [0] Exit                                       │");
-            System.out.println("│                                                │");
-            System.out.println("│ Add Ons                                        │");
-            System.out.println("│ [6] Gain priveledge access                     │");
-            System.out.println("│ [7] Revoke priveledge access                   │");
-            System.out.println("+ ────────────────────────────────────────────── +");
-
-            System.out.print("Enter choice: ");
-            choice = str_input.nextLine();
-
+            System.out.println("\n");
+            showMenu();
+            System.out.print("\n\tEnter choice: ");
+            choice = input.nextLine();
             clearScreen();
             System.out.println("\n");
-
-            if(choice.equals("1")) 
+            if(choice.equals("1"))
             {
-                try { AddRecord(); } catch(IOException e) { e.printStackTrace(); }
+                try 
+                { 
+                    showAddRecordAsciiArt();
+                    AddRecord();
+                } 
+                catch(IOException e) 
+                { 
+                    e.printStackTrace(); 
+                }
             }
             else if(choice.equals("2"))
             {
-                try { ViewAllRecord(isValid); } catch(IOException e) { e.printStackTrace(); }
+                try 
+                { 
+                    showViewRecordAsciiArt();
+                    ViewAllRecord(isValid); 
+                } 
+                catch(IOException e) 
+                { 
+                    e.printStackTrace(); 
+                }
             }
             else if(choice.equals("3"))
-            {
-                try { UpdateRecordbyID(isValid); } catch(IOException e) { e.printStackTrace(); }
+            { 
+                try 
+                {
+                    showSearchRecordAsciiArt();
+                    SearchRecordbyIdOrName(isValid);
+                }
+                catch(IOException e)
+                {
+                    e.printStackTrace();
+                }
             }
             else if(choice.equals("4"))
             {
-                try { DeleteRecordByID(); } catch(IOException e) { e.printStackTrace(); }
+                try 
+                {
+                    showUpdateRecordAsciiArt();
+                    UpdateUserInformationById(isValid);
+                }
+                catch(IOException e)
+                {
+                    e.printStackTrace();
+                }
             }
             else if(choice.equals("5"))
             {
-                try { SearchRecordbyIDOrName(); } catch(IOException e) { e.printStackTrace(); }
+                try 
+                {
+                    showDeleteRecordAsciiArt();
+                    DeleteRecordByID(isValid);
+                }
+                catch(IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            else if(choice.equals("0"))
+            {
+                showThankYouMessage();
+                break;
             }
             else if(choice.equals("6"))
             {
-                System.out.print("Enter password: ");
-                inpPasswd = str_input.nextLine();
-                if(inpPasswd.equals(crrtPasswd))
+                System.out.print("\tEnter system password to gain access: ");
+                inPasswd = input.nextLine();
+
+                if(inPasswd.equals(crrtPassword))
                 {
                     isValid = true;
-                    System.out.println("You now have access to uncensored information");
+                    System.out.println("\tAccess Granted");
                 }
                 else
                 {
-                    isValid = false;
-                    System.out.println("INCORRECT PASSWORD");
-                }  
+                    System.out.println("\tIncorrect password");
+                }
             }
             else if(choice.equals("7"))
             {
+                System.out.println("\tPermission rebuked successfully");
                 isValid = false;
-                System.out.println("Priviledge access revoked successfully");
-            }
-            else if(choice.equals("0")) 
-            {
-                System.out.println("Thank you for using IBorrow");
-                break;
             }
             else
             {
-                System.out.println("INVALID INPUT TRY AGAIN");
+                System.out.println("\tInvalid Input");
             }
 
-            System.out.print("\nPress any key. ");
-            str_input.nextLine();
+            System.out.print("\n\tPress any key. ");
+            input.nextLine();
+            clearScreen();
         }
 
-        str_input.close();
+        input.close();
     }
-
-    public static void AddRecord() throws IOException 
+    public static void AddRecord() throws IOException
     {
         try
         {
-            Scanner str_input = new Scanner(System.in);
+            Scanner input = new Scanner(System.in);
             BufferedWriter bw;
-            String name, id, section, contactInfo, bookName;
-            bw = new BufferedWriter(new FileWriter("employee_db.txt", true));
+            String Name, Id, Section, ContactInfo, BookName;
 
-            System.out.println("+ ──────────────────────────────────── +");
-            System.out.println("│            ADD RECORD                |");
-            System.out.print("Enter name: ");
-            name = str_input.nextLine();
-            System.out.print("Enter student ID: ");
-            id = str_input.nextLine();
-            System.out.print("Enter section: ");
-            section = str_input.nextLine();
-            System.out.print("Enter contact info: ");
-            contactInfo = str_input.nextLine();
-            System.out.print("Enter book name: ");
-            bookName = str_input.nextLine();
+            System.out.print("\tName: ");
+            Name = input.nextLine();
+            System.out.print("\tStudent ID: ");
+            Id = input.nextLine();
+            System.out.print("\tSection: ");
+            Section = input.nextLine();
+            System.out.print("\tContact Info: ");
+            ContactInfo = input.nextLine();
+            System.out.print("\tBook Name: ");
+            BookName = input.nextLine();
 
-            bw.write(name.toUpperCase() + "::::" + id.toUpperCase() + "::::" + section.toUpperCase() + "::::" + contactInfo.toUpperCase() + "::::" + bookName.toUpperCase());
+            bw = new BufferedWriter(new FileWriter("database.txt", true));
+            bw.write(Name.toUpperCase() + "::::" + Id.toUpperCase() + "::::" + Section.toUpperCase() + "::::" + ContactInfo.toUpperCase() + "::::" + BookName.toUpperCase());
             bw.flush();
             bw.newLine();
             bw.close();
         }
         catch(IOException e)
         {
-            System.out.println(e.toString());
+            System.out.println("\t" + e.toString());
         }
     }
 
-    public static void showUnCensoredRecord(String[] data) 
-    {
-        System.out.printf(
-            "%-2s %-20s %-15s %-12s %-15s %-30s %-2s%n",
-            "│ ",
-            data[0].toString(),
-            data[1].toString(), 
-            data[2].toString(), 
-            data[3].toString(),
-            data[4].toString(),
-            "│ "
-        );
-	}
-    
-    public static void showCensoredRecord(String[] data) 
-    {
-        System.out.printf(
-            "%-2s %-20s %-15s %-12s %-15s %-30s %-2s %n",
-            "│ ",
-            data[0].toString().replaceAll("[AEIOU]", "*"),
-            data[1].toString(), 
-            data[2].toString(), 
-            data[3].toString(),
-            data[4].toString(),
-            "│ "
-        );
-	}
-    
-    public static void showTableHeader() 
-    {
-        System.out.printf("%-100s%n", "+ ───────────────────────────────────────────────────────────────────────────────────────────────── +");
-        System.out.printf(
-            "%-2s %-20s %-15s %-12s %-15s %-30s %-2s %n",
-            "│ ",
-            "Name", 
-            "ID", 
-            "Section", 
-            "Contact Info",
-            "Book Name",
-            "│ "
-        );
-        System.out.printf("%-100s%n", "+ ───────────────────────────────────────────────────────────────────────────────────────────────── +");
-	}
-
-    public static void ViewAllRecord(boolean isValid) throws IOException 
+    public static void ViewAllRecord(boolean isValid) throws IOException
     {
         try 
-        { 
+        {
+            BufferedReader br;
             String[] data;
             String record;
-            BufferedReader br;
-
-            br = new BufferedReader(new FileReader("employee_db.txt"));
-          
-			showTableHeader();
             
-			while((record = br.readLine()) != null) 
+            br = new BufferedReader(new FileReader("database.txt"));
+
+            showTableHeader();
+            while((record = br.readLine()) != null)
             {
-				data = record.split("::::");
-				
+                data = record.split("::::");
                 if(isValid)
                 {
-                    showUnCensoredRecord(data);                  
+                    showUnCensoredRecord(data);
                 }
                 else
                 {
                     showCensoredRecord(data);
                 }
-			}
+            }
 
-            System.out.printf("%-100s%n", "+ ───────────────────────────────────────────────────────────────────────────────────────────────── +");
-
-			br.close();    
-		} 
-        catch (IOException e) 
+            br.close();
+        } 
+        catch(IOException e) 
         {
-			System.out.println(e.toString());
-		}
+            System.out.println("\t" + e.toString());
+        }
+        
     }
-    
-    public static void UpdateRecordbyID(boolean isValid) throws IOException 
+
+    public static void SearchRecordbyIdOrName(boolean isValid) throws IOException
     {
         try 
         {
-			Scanner str_input = new Scanner(System.in);
-    		String[] data;
-            String newName, newSection, newId, newContactInfo, newBookName, record, id,record2;	
-    		File db;
-    		File tempDB;
-    		BufferedReader br;
-    		BufferedWriter bw;
-            BufferedReader br2;
-            boolean isFound, success;
-    		    		
-            isFound = false;
-            db = new File("employee_db.txt");
-            tempDB = new File("employee_db_temp.txt");
-            br = new BufferedReader(new FileReader(db));
-            br2 = new BufferedReader(new FileReader(db));
-            bw = new BufferedWriter(new FileWriter(tempDB));
-    		
-    		ViewAllRecord(false);
-    		System.out.println("Update borrower's record");   	
-			System.out.print("Enter the borrower's ID: ");
-	    	id = str_input.nextLine();	    
+            Scanner input = new Scanner(System.in);
+            BufferedReader br;
+            String[] data;
+            String record;
+            String searchQuery;
+
+            br = new BufferedReader(new FileReader("database.txt"));
             
-            id = id.toUpperCase();
-            
-	    	showTableHeader();
-			while((record = br.readLine()) != null) 
+            System.out.print("\tEnter id or name: ");
+            searchQuery = input.nextLine();
+            searchQuery = searchQuery.toUpperCase();
+
+            showTableHeader();
+            while((record = br.readLine()) != null)
             {
-				data = record.split("::::");
-    			if(data[1].toString().equals(id)) 
+                data = record.split("::::");
+
+                if(data[1].toString().equals(searchQuery) || data[0].toString().contains(searchQuery))
                 {
-    				isFound = true;
                     if(isValid)
                     {
                         showUnCensoredRecord(data);
                     }
-                    else 
+                    else
                     {
                         showCensoredRecord(data);
                     }
-				}
-				
-			}	 
-	    	br.close(); 
+                }
+            }
 
-			if(isFound) 
+            br.close();
+        }
+        catch(IOException e)
+        {
+            System.out.println("\t" + e.toString());
+        }
+    }
+
+    public static void UpdateUserInformationById(boolean isValid) throws IOException
+    {
+        try 
+        {
+            Scanner input = new Scanner(System.in);
+            File db;
+            File tempDB;
+            BufferedReader br;
+            BufferedWriter bw;
+            BufferedReader br2;
+            String[] data = null;
+            String[] foundData = null;
+            String record, record2;
+            boolean isFound;
+            String newName, newSection, newId, newContactInfo, newBookName;
+            String upChoice, idSearchQuery;
+
+            db = new File("database.txt");
+            tempDB = new File("tmp_database.txt");
+            br = new BufferedReader(new FileReader(db));
+            br2 = new BufferedReader(new FileReader(db));
+            bw = new BufferedWriter(new FileWriter(tempDB));
+            isFound = false;
+
+            ViewAllRecord(isValid);	
+            System.out.print("\tEnter the borrower's ID: ");
+            idSearchQuery = input.nextLine();
+            idSearchQuery = idSearchQuery.toUpperCase();
+
+            while((record = br.readLine()) != null)
             {
-				System.out.print("Enter the new name: ");
-				newName = str_input.nextLine();   
-                System.out.print("Enter the new ID: ");
-				newId = str_input.nextLine(); 
-                System.out.print("Enter the new section: ");
-				newSection = str_input.nextLine();    	
-                System.out.print("Enter the new contact info: ");
-				newContactInfo = str_input.nextLine();  
-                System.out.print("Enter the new book name: ");
-				newBookName = str_input.nextLine();  
-					
+                data = record.split("::::");
+
+                if(data[1].toString().equals(idSearchQuery))
+                {
+                    foundData = record.split("::::");
+                    isFound = true;
+                    
+                    if(isFound)
+                    {
+                        showTableHeader();
+                    }
+
+                    if(isValid)
+                    {
+                        showUnCensoredRecord(foundData);
+                    }
+                    else
+                    {
+                        showCensoredRecord(foundData);
+                    }
+                }
+            }
+
+            br.close();
+
+            if(isFound) 
+            {
+                ViewAllRecord(isValid);
+                System.out.println("\n\tChanging info for user with ID of " + idSearchQuery);
+                showChangingInfoMenu();
+                
+                System.out.print("\n\tEnter choice: ");
+                upChoice = input.nextLine();
+                
+                switch(upChoice) {
+                    case "1":
+                        System.out.print("\tEnter the new name: ");
+                        newName = input.nextLine(); 
+                        newId = foundData[1];
+                        newSection = foundData[2];
+                        newContactInfo = foundData[3];
+                        newBookName = foundData[4];
+                        break;
+                    case "2":
+                        System.out.print("\tEnter the new ID: ");
+                        newId = input.nextLine(); 
+                        newName = foundData[0];
+                        newSection = foundData[2];
+                        newContactInfo = foundData[3];
+                        newBookName = foundData[4];
+                        break;
+                
+                    case "3":
+                        System.out.print("\tEnter the new section: ");
+                        newSection = input.nextLine();
+                        newName = foundData[0];
+                        newId = foundData[1];
+                        newContactInfo = foundData[3];
+                        newBookName = foundData[4];
+                        break;
+                    case "4":
+                        System.out.print("\tEnter the new contact info: ");
+                        newContactInfo = input.nextLine(); 
+                        newName = foundData[0];
+                        newId = foundData[1];
+                        newSection = foundData[2];
+                        newBookName = foundData[4];
+                        break;
+                    case "5":
+                        System.out.print("\tEnter the new book name: ");
+                        newBookName = input.nextLine(); 
+                        newName = foundData[0];
+                        newId = foundData[1];
+                        newSection = foundData[2];
+                        newContactInfo = foundData[3]; 
+                        break;
+                    default:
+                        System.out.print("\tEnter the new name: ");
+                        newName = input.nextLine();   
+                        System.out.print("\tEnter the new ID: ");
+                        newId = input.nextLine(); 
+                        System.out.print("\tEnter the new section: ");
+                        newSection = input.nextLine();    	
+                        System.out.print("\tEnter the new contact info: ");
+                        newContactInfo = input.nextLine();  
+                        System.out.print("\tEnter the new book name: ");
+                        newBookName = input.nextLine();  
+                        
+                        break;
+                }
+                	
 				while((record2 = br2.readLine()) != null) 
                 {  
 					data = record2.split("::::");
-					if(data[1].toString().equals(id)) 
+					if(data[1].toString().equals(idSearchQuery)) 
                     {
 						bw.write(newName.toUpperCase() + "::::" + newId.toUpperCase() + "::::" + newSection.toUpperCase() + "::::" + newContactInfo.toUpperCase() + "::::" + newBookName.toUpperCase());
 					} 
@@ -292,100 +374,148 @@ public class Idea {
 				bw.close();
 				br2.close();    		
 				db.delete();    		
-				success = tempDB.renameTo(db);   
+				tempDB.renameTo(db);   
 			}
-		} 
-        catch(IOException e) 
+            else
+            {
+                System.out.println("\tUser with ID of " + idSearchQuery + " not found");
+            }
+        }
+        catch(IOException e)
         {
-			System.out.println (e.toString());
-		}
+            System.out.println("\t" + e.toString());
+        }
     }
 
-    public static void DeleteRecordByID() throws IOException 
+    public static void DeleteRecordByID(boolean isValid) throws IOException 
     {
 		try 
         {
-    		Scanner str_input = new Scanner(System.in);
-            String[] data ;
-            String id, record;
-    		File temporaryDB;
-    		File db;
-    		BufferedReader br;
-    		BufferedWriter bw;
+            Scanner input = new Scanner(System.in);
+            String[] data;
+            String record;
+            File tempDB;
+            File db;
+            BufferedReader br;
+            BufferedWriter bw;
+            String idSearchQuery;
 
-            temporaryDB = new File("employee_db_temp.txt");
-            db = new File("employee_db.txt");
+            tempDB = new File("tmp_database.txt");
+            db = new File("database.txt");
             br = new BufferedReader(new FileReader(db));
-            bw = new BufferedWriter(new FileWriter(temporaryDB));
+            bw = new BufferedWriter(new FileWriter(tempDB));
 
-    		ViewAllRecord(false);
-    		System.out.println("Delete borrower's record");    		
-    		System.out.print("Enter the borrowers ID: ");
-    		id = str_input.nextLine();
-
-            id = id.toUpperCase();
-    		while((record = br.readLine()) != null) 
+            ViewAllRecord(isValid);
+            System.out.println("\tDelete borrower's record");    		
+            System.out.print("\tEnter the borrowers ID: ");
+            idSearchQuery = input.nextLine();
+            idSearchQuery = idSearchQuery.toUpperCase();
+            
+            while((record = br.readLine()) != null) 
             {
-    			data = record.split("::::");
-    			if(data[1].toString().equals(id)) 
-    			{
+                data = record.split("::::");
+                if(data[1].toString().equals(idSearchQuery)) 
+                {
                     continue;
                 }
                 
                 bw.write(record);
-    			bw.flush();
-    			bw.newLine();
-    		}
-    		
-    		br.close();
-    		bw.close();
-    		db.delete();
-    		temporaryDB.renameTo(db);
-		} 
-        catch(IOException e) 
-        {
-			System.out.println (e.toString());
-		}
-    }
-    
-    public static void SearchRecordbyIDOrName() throws IOException 
-    {
-        Scanner str_input = new Scanner(System.in);
-        String searchQuery, record;
-        String[] data;
-        BufferedReader br;
-        boolean isFound;
-
-        isFound = false;
-        br = new BufferedReader(new FileReader("employee_db.txt"));
-
-        System.out.print("Enter id or name of borrower: ");
-        searchQuery = str_input.nextLine();
-
-        searchQuery = searchQuery.toUpperCase();
-
-        while((record = br.readLine()) != null)
-        {
-            data = record.split("::::");
-
-            if(data[1].toString().equals(searchQuery) || data[0].toString().contains(searchQuery))
-            { 
-                isFound = true;
-                if(isFound)
-                {
-                    showTableHeader();
-                }
-                
-                showCensoredRecord(data);
+                bw.flush();
+                bw.newLine();
             }
+            
+            br.close();
+            bw.close();
+            db.delete();
+            tempDB.renameTo(db);
         }
-
-        if(!isFound)
+        catch(IOException e)
         {
-            System.out.println("ID\\NAME " + searchQuery + " is not found");
+            System.out.println("\t" + e.toString());
         }
+    }
 
-        br.close();
+    public static void showTableHeader() 
+    {
+        System.out.printf("%-100s%n", "\t+ ───────────────────────────────────────────────────────────────────────────────────────────────── +");
+        System.out.printf(
+            "%-2s %-20s %-15s %-12s %-15s %-30s %-2s %n",
+            "\t│ ",
+            "Name", 
+            "ID", 
+            "Section", 
+            "Contact Info",
+            "Book Name",
+            "│ "
+        );
+        System.out.printf("%-100s%n", "\t+ ───────────────────────────────────────────────────────────────────────────────────────────────── +");
+	}
+
+
+    public static void showUnCensoredRecord(String[] data) 
+    {
+        System.out.printf(
+            "%-2s %-20s %-15s %-12s %-15s %-30s %-2s%n",
+            "\t│ ",
+            data[0].toString(),
+            data[1].toString(), 
+            data[2].toString(), 
+            data[3].toString(),
+            data[4].toString(),
+            "│ "
+        );
+
+        System.out.printf("%-100s%n", "\t+ ───────────────────────────────────────────────────────────────────────────────────────────────── +");
+	}
+    
+    public static void showCensoredRecord(String[] data) 
+    {
+        System.out.printf(
+            "%-2s %-20s %-15s %-12s %-15s %-30s %-2s %n",
+            "\t│ ",
+            data[0].toString().replaceAll("[AEIOU]", "*"),
+            data[1].toString(), 
+            data[2].toString(), 
+            data[3].toString(),
+            data[4].toString(),
+            "│ "
+        );
+
+        System.out.printf("%-100s%n", "\t+ ───────────────────────────────────────────────────────────────────────────────────────────────── +");
+	}
+
+    public static void showMenu()
+    {
+        System.out.println("\t+ ────────────────────────────────────────────── +");
+        System.out.println("\t│    IBorrow: Book Borrowing Management System   │");
+        System.out.println("\t+ ────────────────────────────────────────────── +");
+        System.out.println("\t│ Main                                           │");
+        System.out.println("\t│ [1] Add borrower                               │");
+        System.out.println("\t│ [2] View borrowers                             │");
+        System.out.println("\t│ [3] Search borrower                            │");
+        System.out.println("\t│ [4] Update borrower's info                     │");
+        System.out.println("\t│ [5] Delete a borrower                          │");
+        System.out.println("\t│ [0] Exit                                       │");
+        System.out.println("\t│                                                │");
+        System.out.println("\t│ Add Ons                                        │");
+        System.out.println("\t│ [6] Gain priveledge access                     │");
+        System.out.println("\t│ [7] Revoke priveledge access                   │");
+        System.out.println("\t+ ────────────────────────────────────────────── +");
+    }
+
+    public static void showChangingInfoMenu()
+    {
+        System.out.println("\t+ ────────────────────────────────────────────── +");
+        System.out.println("\t│    Which one do you want to change/update?     │");
+        System.out.println("\t+ ────────────────────────────────────────────── +");
+        System.out.println("\t│ Choices                                        │");
+        System.out.println("\t│ [1] Name                                       │");
+        System.out.println("\t│ [2] ID                                         │");
+        System.out.println("\t│ [3] Section                                    │");
+        System.out.println("\t│ [4] Contact Info                               │");
+        System.out.println("\t│ [5] Book Name                                  │");
+        System.out.println("\t│ [6] All                                        │");
+        System.out.println("\t+ ────────────────────────────────────────────── +");
     }
 
     public static void clearScreen()
@@ -403,5 +533,86 @@ public class Idea {
             }   
         } 
         catch(IOException | InterruptedException ex) {}
-	}
+    }
+
+    public static void showAddRecordAsciiArt() 
+    {
+        System.out.println("\t █████╗ ██████╗ ██████╗     ██████╗ ███████╗ ██████╗ ██████╗ ██████╗ ██████╗ ");
+        System.out.println("\t██╔══██╗██╔══██╗██╔══██╗    ██╔══██╗██╔════╝██╔════╝██╔═══██╗██╔══██╗██╔══██╗");
+        System.out.println("\t███████║██║  ██║██║  ██║    ██████╔╝█████╗  ██║     ██║   ██║██████╔╝██║  ██║");
+        System.out.println("\t██╔══██║██║  ██║██║  ██║    ██╔══██╗██╔══╝  ██║     ██║   ██║██╔══██╗██║  ██║");
+        System.out.println("\t██║  ██║██████╔╝██████╔╝    ██║  ██║███████╗╚██████╗╚██████╔╝██║  ██║██████╔╝");
+        System.out.println("\t╚═╝  ╚═╝╚═════╝ ╚═════╝     ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚═════╝ ");
+        System.out.println();
+    }
+
+    public static void showViewRecordAsciiArt() 
+    {
+        System.out.println("\t██╗   ██╗██╗███████╗██╗    ██╗     █████╗ ██╗     ██╗         ██████╗ ███████╗ ██████╗ ██████╗ ██████╗ ██████╗ ");
+        System.out.println("\t██║   ██║██║██╔════╝██║    ██║    ██╔══██╗██║     ██║         ██╔══██╗██╔════╝██╔════╝██╔═══██╗██╔══██╗██╔══██╗");
+        System.out.println("\t██║   ██║██║█████╗  ██║ █╗ ██║    ███████║██║     ██║         ██████╔╝█████╗  ██║     ██║   ██║██████╔╝██║  ██║");
+        System.out.println("\t╚██╗ ██╔╝██║██╔══╝  ██║███╗██║    ██╔══██║██║     ██║         ██╔══██╗██╔══╝  ██║     ██║   ██║██╔══██╗██║  ██║");
+        System.out.println("\t ╚████╔╝ ██║███████╗╚███╔███╔╝    ██║  ██║███████╗███████╗    ██║  ██║███████╗╚██████╗╚██████╔╝██║  ██║██████╔╝");
+        System.out.println("\t  ╚═══╝  ╚═╝╚══════╝ ╚══╝╚══╝     ╚═╝  ╚═╝╚══════╝╚══════╝    ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚═════╝ ");
+        System.out.println();
+    }
+
+    public static void showSearchRecordAsciiArt() 
+    {
+        System.out.println("\t███████╗███████╗ █████╗ ██████╗  ██████╗██╗  ██╗    ██████╗ ███████╗ ██████╗ ██████╗ ██████╗ ██████╗ ");
+        System.out.println("\t██╔════╝██╔════╝██╔══██╗██╔══██╗██╔════╝██║  ██║    ██╔══██╗██╔════╝██╔════╝██╔═══██╗██╔══██╗██╔══██╗");
+        System.out.println("\t███████╗█████╗  ███████║██████╔╝██║     ███████║    ██████╔╝█████╗  ██║     ██║   ██║██████╔╝██║  ██║");
+        System.out.println("\t╚════██║██╔══╝  ██╔══██║██╔══██╗██║     ██╔══██║    ██╔══██╗██╔══╝  ██║     ██║   ██║██╔══██╗██║  ██║");
+        System.out.println("\t███████║███████╗██║  ██║██║  ██║╚██████╗██║  ██║    ██║  ██║███████╗╚██████╗╚██████╔╝██║  ██║██████╔╝");
+        System.out.println("\t╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝    ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚═════╝ ");
+        System.out.println();
+    }
+
+    public static void showUpdateRecordAsciiArt() 
+    {
+        System.out.println("\t██╗   ██╗██████╗ ██████╗  █████╗ ████████╗███████╗    ██████╗ ███████╗ ██████╗ ██████╗ ██████╗ ██████╗ ");
+        System.out.println("\t██║   ██║██╔══██╗██╔══██╗██╔══██╗╚══██╔══╝██╔════╝    ██╔══██╗██╔════╝██╔════╝██╔═══██╗██╔══██╗██╔══██╗");
+        System.out.println("\t██║   ██║██████╔╝██║  ██║███████║   ██║   █████╗      ██████╔╝█████╗  ██║     ██║   ██║██████╔╝██║  ██║");
+        System.out.println("\t██║   ██║██╔═══╝ ██║  ██║██╔══██║   ██║   ██╔══╝      ██╔══██╗██╔══╝  ██║     ██║   ██║██╔══██╗██║  ██║");
+        System.out.println("\t╚██████╔╝██║     ██████╔╝██║  ██║   ██║   ███████╗    ██║  ██║███████╗╚██████╗╚██████╔╝██║  ██║██████╔╝");
+        System.out.println("\t ╚═════╝ ╚═╝     ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝    ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚═════╝ ");
+        System.out.println();
+    }
+
+    public static void showDeleteRecordAsciiArt() 
+    {
+        System.out.println("\t██████╗ ███████╗██╗     ███████╗████████╗███████╗    ██████╗ ███████╗ ██████╗ ██████╗ ██████╗ ██████╗ ");
+        System.out.println("\t██╔══██╗██╔════╝██║     ██╔════╝╚══██╔══╝██╔════╝    ██╔══██╗██╔════╝██╔════╝██╔═══██╗██╔══██╗██╔══██╗");
+        System.out.println("\t██║  ██║█████╗  ██║     █████╗     ██║   █████╗      ██████╔╝█████╗  ██║     ██║   ██║██████╔╝██║  ██║");
+        System.out.println("\t██║  ██║██╔══╝  ██║     ██╔══╝     ██║   ██╔══╝      ██╔══██╗██╔══╝  ██║     ██║   ██║██╔══██╗██║  ██║");
+        System.out.println("\t██████╔╝███████╗███████╗███████╗   ██║   ███████╗    ██║  ██║███████╗╚██████╗╚██████╔╝██║  ██║██████╔╝");
+        System.out.println("\t╚═════╝ ╚══════╝╚══════╝╚══════╝   ╚═╝   ╚══════╝    ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚═════╝ ");
+        System.out.println();
+    }
+
+    public static void showThankYouMessage()
+    {
+        System.out.println("\t████████╗██╗  ██╗ █████╗ ███╗   ██╗██╗  ██╗    ██╗   ██╗ ██████╗ ██╗   ██╗    ███████╗ ██████╗ ██████╗     ");
+        System.out.println("\t╚══██╔══╝██║  ██║██╔══██╗████╗  ██║██║ ██╔╝    ╚██╗ ██╔╝██╔═══██╗██║   ██║    ██╔════╝██╔═══██╗██╔══██╗    ");
+        System.out.println("\t   ██║   ███████║███████║██╔██╗ ██║█████╔╝      ╚████╔╝ ██║   ██║██║   ██║    █████╗  ██║   ██║██████╔╝    ");
+        System.out.println("\t   ██║   ██╔══██║██╔══██║██║╚██╗██║██╔═██╗       ╚██╔╝  ██║   ██║██║   ██║    ██╔══╝  ██║   ██║██╔══██╗    ");
+        System.out.println("\t   ██║   ██║  ██║██║  ██║██║ ╚████║██║  ██╗       ██║   ╚██████╔╝╚██████╔╝    ██║     ╚██████╔╝██║  ██║    ");
+        System.out.println("\t   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝       ╚═╝    ╚═════╝  ╚═════╝     ╚═╝      ╚═════╝ ╚═╝  ╚═╝    ");
+        System.out.println("\t                                                                                                            ");
+        System.out.println("\t██╗   ██╗███████╗██╗███╗   ██╗ ██████╗     ██╗██████╗  ██████╗ ██████╗ ██████╗  ██████╗ ██╗    ██╗         ");
+        System.out.println("\t██║   ██║██╔════╝██║████╗  ██║██╔════╝     ██║██╔══██╗██╔═══██╗██╔══██╗██╔══██╗██╔═══██╗██║    ██║         ");
+        System.out.println("\t██║   ██║███████╗██║██╔██╗ ██║██║  ███╗    ██║██████╔╝██║   ██║██████╔╝██████╔╝██║   ██║██║ █╗ ██║         ");
+        System.out.println("\t██║   ██║╚════██║██║██║╚██╗██║██║   ██║    ██║██╔══██╗██║   ██║██╔══██╗██╔══██╗██║   ██║██║███╗██║         ");
+        System.out.println("\t╚██████╔╝███████║██║██║ ╚████║╚██████╔╝    ██║██████╔╝╚██████╔╝██║  ██║██║  ██║╚██████╔╝╚███╔███╔╝         ");
+        System.out.println("\t ╚═════╝ ╚══════╝╚═╝╚═╝  ╚═══╝ ╚═════╝     ╚═╝╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝  ╚══╝╚══╝          ");
+        System.out.println();
+    }
 }
+
+
+
+
+
+
+
+
